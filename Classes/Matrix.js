@@ -4,10 +4,13 @@ class Matrix {
   constructor(...rows) {
     // give the rows their corresponding standard bases
     rows.forEach( (row, order) => {
+      if (row.isEmpty) throw new Error('One of the rows during matrix creation was empty :/');
+
       const inverseEls = [];
       for (let i = 0; i < row.elements.length; i++) {
         inverseEls.push( (i === order) ? 1 : 0 ); // push 0 or 1 depending
       }
+
       row.inverse = new Row(...inverseEls);
       row.inverse.inverse = row; // backlink just for fun
     })
@@ -18,9 +21,13 @@ class Matrix {
   // row 1 is the one being modified
   addRow(row1, row2, multiplier = 1) {
     row1.map( (el, i) => el + (row2.elements[i] * multiplier) );
+
+    if (row1.isEmpty) throw new Error('You emptied the row.');
   }
 
   scaleRow(row, multiplier) {
+    if (multiplier === 0) throw new Error('How the hell are you gonna invert THAT?!');
+
     row.map( (el) => el * multiplier );
   }
 
@@ -41,6 +48,10 @@ class Matrix {
     })
 
     if (addNewline) console.log('\n');
+  }
+
+  invert() {
+    // if
   }
 }
 

@@ -20,6 +20,14 @@ class Row {
 
     return 0;
   }
+
+  get isEmpty() {
+    for (let i = 0; i < this.elements.length; i++) {
+      if (this.elements[i]) return false;
+    }
+
+    return true;
+  }
 }
 
 module.exports = Row;
