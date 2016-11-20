@@ -12,6 +12,14 @@ class Row {
       invEls[j] = fn(invEls[j], j, invEls);
     }
   }
+
+  get leadingEntryIdx() {
+    for (let i = 0; i < this.elements.length; i++) {
+      if (this.elements[i]) return i;
+    }
+
+    return 0;
+  }
 }
 
 module.exports = Row;

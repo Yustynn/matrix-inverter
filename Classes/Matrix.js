@@ -31,6 +31,10 @@ class Matrix {
     [ this.rows[idx1], this.rows[idx2] ] = [ this.rows[idx2], this.rows[idx1] ];
   }
 
+  sort() {
+    this.rows.sort( (a, b) => a.leadingEntryIdx > b.leadingEntryIdx ? 1 : 0 )
+  }
+
   print(addNewline = false) {
     this.rows.forEach((row) => {
       console.log( row.elements.join(', ') );
