@@ -4,13 +4,24 @@ class Row {
   }
 
   // map both inverse elements and own elements
-  map(fn) {
+  mapDestructive(fn) {
     const [els, invEls] = [this.elements, this.inverse.elements];
 
     for (let j = 0; j < els.length; j++) {
       els[j] = fn(els[j], j, els);
       invEls[j] = fn(invEls[j], j, invEls);
     }
+  }
+
+  print(addNewline = false) {
+    console.log( this.elements.join(', ') );
+    if (addNewline) console.log('\n');
+  }
+
+
+  printInverse(addNewline = false) {
+    console.log( this.inverse.elements.join(', ') );
+    if (addNewline) console.log('\n');
   }
 
   get leadingEntryIdx() {

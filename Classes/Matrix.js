@@ -18,17 +18,20 @@ class Matrix {
     this.rows = rows;
   }
 
-  // row 1 is the one being modified
+  // @TODO: hacky fix right now. mapDestructive method not sufficient here
   addRow(row1, row2, multiplier = 1) {
-    row1.map( (el, i) => el + (row2.elements[i] * multiplier) );
+    // row1.mapDestructive( (el, i) => el + (row2.elements[i] * multiplier) );
 
-    if (row1.isEmpty) throw new Error('You emptied the row.');
+    row1.elements = row1.elements.map( (el, i) => el + (row2.elements[i] * multiplier) );
+    row1.inverse.elements = row1.inverse.elements.map( (el, i) => el + (row2.inverse.elements[i] * multiplier) );
+
+    if (row1.isEmpty) throw new Error('You emptied the row during row addition.');
   }
 
   scaleRow(row, multiplier) {
     if (multiplier === 0) throw new Error('How the hell are you gonna invert THAT?!');
 
-    row.map( (el) => el * multiplier );
+    row.mapDestructive( (el) => el * multiplier );
   }
 
   swapRows(row1, row2) {
@@ -50,8 +53,33 @@ class Matrix {
     if (addNewline) console.log('\n');
   }
 
+  printInverse(addNewline = false) {
+    this.rows.forEach((row) => {
+      console.log( row.inverse.elements.join(', ') );
+    })
+
+    if (addNewline) console.log('\n');
+  }
+
   invert() {
-    // if
+    this.sort();
+
+    for (let m = 0; m < this.rows.length; m++) {
+      const row2 = this.rows[m];
+
+      this.scaleRow(row2, 1/row2.elements[m]);
+
+      for (let n = 0; n < this.rows.length; n++) {
+        if (m === n) continue; // don't add to itself!
+
+        const row1 = this.rows[n];
+        const multiplier = -row1.elements[m] / row2.elements[m];
+
+        if (!multiplier) continue;
+
+        this.addRow( row1, row2, multiplier );
+      }
+    }
   }
 }
 
